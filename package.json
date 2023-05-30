@@ -1,0 +1,22 @@
+{
+  "name": "payout-dash",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Namees-aLbayati/Payout-Dash.git"
+  },
+  "author": "Namees albayati",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Namees-aLbayati/Payout-Dash/issues"
+  },
+  "homepage": "https://github.com/Namees-aLbayati/Payout-Dash#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
