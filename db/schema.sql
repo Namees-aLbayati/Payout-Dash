@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS dunkin_db;
+CREATE DATABASE dunkin_db;
