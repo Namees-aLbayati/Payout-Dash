@@ -16,27 +16,34 @@ type:DataTypes.INTEGER
 type:DataTypes.INTEGER
     },
     name:{
-        type:DataTypes.STRING
+        type:DataTypes.STRING,
+        defaultValue:'Dunkin Donuts LLC'
     },
     DBA:{
-        type:DataTypes.STRING
+        type:DataTypes.STRING,
+        defaultValue:'Dunkin Donuts'
     },
-    EIN:{
-        type:DataTypes.STRING
+    ein:{
+        type:DataTypes.STRING,
+        defaultValue:"32120240999"
     }
 
      ,address:{
-        type:DataTypes.STRING
+        type:DataTypes.STRING,
+        defaultValue:'Hayes Lights'
     },
     city:{
-        type:DataTypes.STRING
+        type:DataTypes.STRING,
+        defaultValue:'Kerlukemouth'
     },
     state:{
-        type:DataTypes.STRING
+        type:DataTypes.STRING,
+        defaultValue:'IA'
     },
 
 zip:{
-    type:DataTypes.INTEGER
+    type:DataTypes.INTEGER,
+    defaultValue:67485
 }
     
    },{
