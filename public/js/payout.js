@@ -1,7 +1,10 @@
+
 const fileInputEl=document.getElementById('fileInput');
 const uploadBtn=document.getElementById('upload');
-const token='sk_phnDDCbykKzmaGgYLg3RR6Hi'
-const url = 'https://dev.methodfi.com/entities';
+const dunKregex = /Dunkin' Donuts LLC(.*?)\$/;
+
+
+
 function formatDate(date) {
   const d = new Date(date);
   const year = d.getFullYear();
@@ -9,20 +12,9 @@ function formatDate(date) {
   const day = String(d.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
-const createIndvisualsFun=(data)=>{
-  fetch(url,{
-    method:'POST',
-    headers:{
-      'Authorization': `Bearer ${token}`,
 
-      "Content-Type":'application/json'
-    },
-    body: JSON.stringify(data)
 
-    }).then((response)=>response.json()).then((result)=>{
-console.log('success',result)
-    })
-}
+
 
 
 const sendToBackendFun=(data)=>{
@@ -36,24 +28,9 @@ const sendToBackendFun=(data)=>{
     .then(response => response.json())
     .then(responseData => {
       // Handle the response data
-      responseData.forEach(element => {
-        let data={"type": "individual",
-        "individual": {
-          first_name: element.first_name,
-          last_name:element.last_name,
-          phone:element.phone,
-          dob:formatDate(element.dob)
-        }}
-
-createIndvisualsFun(data)
-
-
-
-      });
+    console.log('recived from backend')
     })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+  
 
   
   
@@ -75,3 +52,6 @@ reader.onload = function (event) {
 reader.readAsText(selectedFile);
 
 })
+
+
+
