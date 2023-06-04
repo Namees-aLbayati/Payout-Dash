@@ -53,7 +53,7 @@ dunkinId.forEach((ele)=>{
       type: 'checking',
     },
   }).then((sourceInfor)=>{
-   // console.log('accounts has created succesfully',sourceInfor)
+    console.log('accounts has created succesfully',sourceInfor)
 
   })
 
@@ -137,7 +137,7 @@ let data=  creatDunkinMain().then((dat)=>{
      },
      metadata:{"dunkinId":`${dat}`}
    }).then((result)=>{
-    // console.log('entity emp has created',result)
+     console.log('entity emp has created',result)
    })
  })
 
@@ -163,14 +163,29 @@ routes.get('/test',async(req,res)=>{
 const loanAccountNu = matches[0].substring(matches[0].length - 8);
 const ins = matches[0].substr(0, matches[0].length - 8);
 
+console.log('ins',ins)
 
-
+const merchants =  method.merchants.list({
+  types:'student_loan'
+})
+.then((merchanrsData)=>{
+console.log('params added',merchanrsData)
+merchanrsData.forEach((mdata)=>{
+const plaidArr=mdata.provider_ids.plaid
+const plaidInsGiver=["ins_128026","ins_116248"]
+for(var i=0;i<plaidArr.length;i++){
+if(ins==plaidArr[i]){
+//console.log('id found',ins,plaidArr[i])
+}else{
+  //console.log('not found',ins,plaidArr[i])
 }
-  })
- 
-
 }
-)
+})
+})
+}
+})
+})
+
 
 
 module.exports=routes
