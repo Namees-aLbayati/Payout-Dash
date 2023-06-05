@@ -180,11 +180,15 @@ const account = await method.accounts.create({
   liability: {
     mch_id: `${mch}`,
     number: `${loanAccountNuDestination}`,
+    type:""
   
   }})
 //reciver acc
+const accountSync = await method.accounts.get(`${account.id}`);
+console.log('sync',account)
+
+
 let destenation=account
-console.log('des check',destenation)
 
 let source=sourceId;
 let valuetoTransfer=value;
@@ -193,10 +197,10 @@ const convertedAmount = Math.round(valuetoTransfer * 100);
 const payment = await method.payments.create({
   amount: 5000,
   source: 'acc_FbA8UCqqT8LKp',
-  destination: 'acc_FWLakLCYG7FKk',
+  destination: 'acc_LNJ3BBaYp3TUe',
   description: 'Loan Pmt',
 });
-console.log('payment',payment)
+console.log('pay',payment)
 
 
 }
