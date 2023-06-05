@@ -1,4 +1,5 @@
 # Payout-Dash
+https://github.com/MethodFi/method-node/blob/master/README.md
 const method = new Method({
   apiKey: '<API_KEY>',
   env: Environments.dev,

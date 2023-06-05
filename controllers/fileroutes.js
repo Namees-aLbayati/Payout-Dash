@@ -187,6 +187,7 @@ return false
 const nonEmptyValues = includedValuesARR.flat().filter(value => value !== '');
 
 console.log(nonEmptyValues);
+
 })
 }
 })
