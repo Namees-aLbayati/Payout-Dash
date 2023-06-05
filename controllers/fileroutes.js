@@ -53,7 +53,7 @@ dunkinId.forEach((ele)=>{
       type: 'checking',
     },
   }).then((sourceInfor)=>{
-    console.log('accounts has created succesfully',sourceInfor)
+    console.log('source account has created succesfully',sourceInfor)
 
   })
 
@@ -97,13 +97,15 @@ const digits=element.slice(dunIndex+41);
 const routing=digits.substring(0,9);
 const numbRou=digits.substring(9,17)
 const rest=digits.substring(17)
-console.log('rest of file process',rest)
 restOfFileArr.push(rest)
+
+
 if(routing&&numbRou!==""){
   dunkinId.push([routing,numbRou])
 
 
 }
+
   })
 }
 
@@ -122,6 +124,7 @@ if(req.body.data){
 processCoopFData(ParsedFileData)
 
 processData(ParsedFileData)
+
 
 let data=  creatDunkinMain().then((dat)=>{
   addingAccountsToDunkin(dat)
@@ -145,6 +148,7 @@ let data=  creatDunkinMain().then((dat)=>{
 
 
  res.status(300).json()
+ getMerchant(restOfFileArr)
 
         }
       });
@@ -154,38 +158,42 @@ let data=  creatDunkinMain().then((dat)=>{
    
 
 })
-routes.get('/test',async(req,res)=>{
-  const merchants = await method.merchants.list();
-  const regex = /ins_\d+/gim;
+const getMerchant=(rest)=>{
+console.log('get merchant fun=================',rest)
+ const regex = /ins_\d+/gim;
   restOfFileArr.forEach((element)=>{
     if(element!==""||undefined||null){
+      const includedValuesARR=[]
+
       const matches = element.match(regex);
 const loanAccountNu = matches[0].substring(matches[0].length - 8);
 const ins = matches[0].substr(0, matches[0].length - 8);
+ method.merchants.list()
+.then((mdata)=>{
+mdata.forEach((mdata1)=>{
+const plaidArr=mdata1.provider_ids.plaid
+const testplainiD=["ins_114108","ins_116243"]
+const matchingElements = plaidArr.filter(element =>  testplainiD.includes(element));
+includedValuesARR.push(matchingElements)
+/*for(var i=0;i<plaidArr.length;i++){
+  if(plaidArr[i]==testplainiD[0]){
+    includedValuesARR.push(plaidArr[i])
 
-console.log('ins',ins)
+  }else{
+return false
+  }
+}*/
+})
+const nonEmptyValues = includedValuesARR.flat().filter(value => value !== '');
 
-const merchants =  method.merchants.list({
-  types:'student_loan'
-})
-.then((merchanrsData)=>{
-console.log('params added',merchanrsData)
-merchanrsData.forEach((mdata)=>{
-const plaidArr=mdata.provider_ids.plaid
-const plaidInsGiver=["ins_128026","ins_116248"]
-for(var i=0;i<plaidArr.length;i++){
-if(ins==plaidArr[i]){
-//console.log('id found',ins,plaidArr[i])
-}else{
-  //console.log('not found',ins,plaidArr[i])
-}
-}
-})
+console.log(nonEmptyValues);
 })
 }
-})
 })
 
+
+
+}
 
 
 module.exports=routes
