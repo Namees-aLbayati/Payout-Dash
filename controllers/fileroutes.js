@@ -171,10 +171,11 @@ const ins = matches[0].substr(0, matches[0].length - 8);
  method.merchants.list()
 .then((mdata)=>{
 mdata.forEach((mdata1)=>{
-const plaidArr=mdata1.provider_ids.plaid
-const testplainiD=["ins_114108","ins_116243"]
-const matchingElements = plaidArr.filter(element =>  testplainiD.includes(element));
-includedValuesARR.push(matchingElements)
+  const testplainiD=["ins_114108","ins_116243"]
+
+
+
+
 /*for(var i=0;i<plaidArr.length;i++){
   if(plaidArr[i]==testplainiD[0]){
     includedValuesARR.push(plaidArr[i])
@@ -183,10 +184,12 @@ includedValuesARR.push(matchingElements)
 return false
   }
 }*/
+
 })
 const nonEmptyValues = includedValuesARR.flat().filter(value => value !== '');
 
-console.log(nonEmptyValues);
+console.log(nonEmptyValues,'merchantId');
+
 
 })
 }
