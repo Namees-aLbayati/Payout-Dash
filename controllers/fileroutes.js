@@ -21,7 +21,7 @@ const creatDunkinMain=async()=>{
     const dunkin = await method.entities.create({
       type: 'c_corporation',
       corporation: {
-        name: 'Namees Dunkin Donuts LLC',
+        name: 'Jefffff Dunkin Donuts LLC',
         dba: 'Dunkin Donuts',
         ein: '32120240',
         owners:[],
@@ -35,7 +35,6 @@ const creatDunkinMain=async()=>{
       },
     });
     return dunkin.id
-
 
 }
 
@@ -63,50 +62,45 @@ dunkinId.forEach((ele)=>{
 }
 
 
-const processData=(data)=>{
- data.forEach(data1 => {
-
-  let empId=`EMP-${data1.split('BRC-')[0]}`;
-  var string=data1.split('BRC-')[1]
-  
-if(string!==undefined){
-  let branchId=`BRC-${string.substring(0,36)}`
-  const lengthBoth=`${empId}+${branchId}`.length;
-let first_name=string.substring(36).split(/(?=[A-Z])/)[0];
-let restName= string.substring(36).split(/(?=[A-Z])/)[1];
-let last_name=restName.split(/\d/,2)[0];
- let phone=restName.split("+")[1];
- let dob=restName.match(/\d{2}-\d{2}-\d{4}/)[0];
- console.log('user data',empId,branchId,first_name,last_name,phone,dob)
- userDataArr.push({empId,branchId,first_name,last_name,phone,dob});
+const creatDunkinAccounts=async(ABARouting,accountNumber,dunkinId)=>{
+  const account = await method.accounts.create({
+    holder_id:`${dunkinId}` ,
+    ach: {
+      routing: `${ABARouting}`,
+      number: `${accountNumber}`,
+      type: 'checking',
+    },
+  });
+if (account.type=='ach'){
+  return account.id
+}else{
+  return false
 }
-return userDataArr
 
+
+}
+
+
+
+
+const createEntity=  async(first_name,last_name,phone,dob,DunkinIdDepend)=>{
+  
+const ent = await method.entities.create({
+  type: 'individual',
+  individual: {
+    first_name: `${first_name}`,
+    last_name: `${last_name}`,
+    phone: `${phone}`,
+    dob: `${formatDate(dob)}`,
+  },
+ metadata:{"dunkinId":`${DunkinIdDepend}`}
 });
+if(ent.type=='individual'){
+  return true
+}else{
+  return false
 }
 
-
-
-
-const processCoopFData=  (data)=>{
-  
-  data.forEach((element)=>{
-    const dunIndex=element.indexOf('CORP');
-
-const digits=element.slice(dunIndex+41);
-const routing=digits.substring(0,9);
-const numbRou=digits.substring(9,17)
-const rest=digits.substring(17)
-restOfFileArr.push(rest)
-
-
-if(routing&&numbRou!==""){
-  dunkinId.push([routing,numbRou])
-
-
-}
-
-  })
 }
 
 
@@ -114,6 +108,8 @@ if(routing&&numbRou!==""){
 
 
 routes.post('/file',async(req,res)=>{
+  const DunkinIdDepend= await creatDunkinMain();
+
 if(req.body.data){
     parseString(req.body.data, (err, result) => {
         if (err) {
@@ -121,81 +117,104 @@ if(req.body.data){
         } else {
  const ParsedFileData=result.root.split('EMP-');
 
-processCoopFData(ParsedFileData)
+let CleanfileData=ParsedFileData.filter(element=>element.trim()!=="")
+CleanfileData.forEach((element)=>{
+  const dunIndex=element.indexOf('CORP');
 
-processData(ParsedFileData)
+const digits=element.slice(dunIndex+41);
+const routing=digits.substring(0,9);
+const numbRou=digits.substring(9,17)
+const rest=digits.substring(17)
 
-
-let data=  creatDunkinMain().then((dat)=>{
-  addingAccountsToDunkin(dat)
-
-  userDataArr.forEach((employeedata)=>{
-    method.entities.create({
-     type: 'individual',
-     individual: {
-       first_name: `${employeedata.first_name}`,
-       last_name: `${employeedata.last_name}`,
-       phone: "15121231111",
-       dob: `${formatDate(employeedata.dob)}`,
-     },
-     metadata:{"dunkinId":`${dat}`}
-   }).then((result)=>{
-     console.log('entity emp has created',result)
-   })
- })
-
-});
+creatDunkinAccounts(routing,numbRou,DunkinIdDepend) //will return true or false after the creation
 
 
- res.status(300).json()
- getMerchant(restOfFileArr)
 
-        }
-      });
-}else{
-    res.json({"message":"no data found on the body"})
+let empId=`EMP-${element.split('BRC-')[0]}`;
+  var string=element.split('BRC-')[1]
+if(string!==undefined){
+  let branchId=`BRC-${string.substring(0,36)}`
+  const lengthBoth=`${empId}+${branchId}`.length;
+let first_name=string.substring(36).split(/(?=[A-Z])/)[0];
+let restName= string.substring(36).split(/(?=[A-Z])/)[1];
+let last_name=restName.split(/\d/,2)[0];
+ let phone="15121231111";
+ let dob=restName.match(/\d{2}-\d{2}-\d{4}/)[0];
+ createEntity(first_name,last_name,phone,dob,DunkinIdDepend)
+ //will return true or false 
+
+ const regex = /ins_\d+/gim;
+const matches = element.match(regex);
+const loanAccountNuDestination = matches[0].substring(matches[0].length - 8);
+const ins = matches[0].substr(0, matches[0].length - 8);
+const value=element.split("$")[1]
+creatDunkinAccounts(routing,numbRou,DunkinIdDepend).then((sourceId)=> {
+  getMerchantDetails(ins,loanAccountNuDestination,sourceId,value)
+
+  
+  })
+
+
 }
+
+})
+ }
+});
+}
+
    
 
 })
-const getMerchant=(rest)=>{
-console.log('get merchant fun=================',rest)
- const regex = /ins_\d+/gim;
-  restOfFileArr.forEach((element)=>{
-    if(element!==""||undefined||null){
-      const includedValuesARR=[]
 
-      const matches = element.match(regex);
-const loanAccountNu = matches[0].substring(matches[0].length - 8);
-const ins = matches[0].substr(0, matches[0].length - 8);
- method.merchants.list()
-.then((mdata)=>{
-mdata.forEach((mdata1)=>{
-  const testplainiD=["ins_114108","ins_116243"]
+const getMch=async(mch,loanAccountNuDestination,sourceId,value)=>{
+const merchant = await method.merchants.get(mch);
+const entity = await method.entities.create({
+  type: 'individual',
+  individual: {
+    first_name: `${merchant.parent_name}`,
+  },
+});
+
+const account = await method.accounts.create({
+  holder_id: `${entity.id}`,
+  liability: {
+    mch_id: `${mch}`,
+    number: `${loanAccountNuDestination}`,
+  
+  }})
+//reciver acc
+let destenation=account
+console.log('des check',destenation)
+
+let source=sourceId;
+let valuetoTransfer=value;
+const convertedAmount = Math.round(valuetoTransfer * 100); 
+
+const payment = await method.payments.create({
+  amount: 5000,
+  source: 'acc_FbA8UCqqT8LKp',
+  destination: 'acc_FWLakLCYG7FKk',
+  description: 'Loan Pmt',
+});
+console.log('payment',payment)
 
 
-
-
-/*for(var i=0;i<plaidArr.length;i++){
-  if(plaidArr[i]==testplainiD[0]){
-    includedValuesARR.push(plaidArr[i])
-
-  }else{
-return false
-  }
-}*/
-
-})
-const nonEmptyValues = includedValuesARR.flat().filter(value => value !== '');
-
-console.log(nonEmptyValues,'merchantId');
-
-
-})
 }
-})
 
 
+const getMerchantDetails=async(ins,loanAccountNuDestination,sourceId,value)=>{
+  const studentLoanFakeIns=['ins_116866','ins_126289','ins_116243','ins_132249']
+  const merchants = await method.merchants.list();
+
+const filterArray2=merchants.filter(obj => obj.provider_ids.plaid.includes(ins));
+if(filterArray2==""){
+  const filteredArray = merchants.filter(obj => obj.provider_ids.plaid.includes('ins_132249'));
+  getMch(filteredArray[0].mch_id,loanAccountNuDestination,sourceId,value)
+}else{
+  getMch(filterArray2[0].mch_id,loanAccountNuDestination,sourceId,value)
+
+
+}
 
 }
 
