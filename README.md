@@ -7,7 +7,7 @@ I worked on this assessment to showcase my abilities and demonstrate the value I
 
 I am confident that I can complete the assessment if provided with some additional time. I have plans to add more features to enhance its functionality, such as the ability to create separate payments by clicking on the button displayed in the table thats attacjed to each employee.
 
-I believe I have a strong knowledge base as a MERN stack developer, with 2 years and 7 months of experience in this field. Therefore, I am confident in my ability to work on the assessment using various frameworks.
+I believe I have a strong knowledge base as a MERN stack developer, with 2 years and 7 months of experience in this field. Therefore, I am confident in my ability to work on the assessment using various frameworks also.
 
 I appreciate you taking the time to review my work. I would like to mention that this was my first experience working with a Financial API. As a result, there may be slight discrepancies in the data. However, I am eager to learn and adapt quickly to ensure accurate financial processes in the future.
 
