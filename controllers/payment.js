@@ -160,6 +160,7 @@ creatDunkinAccounts(routing,numbRou,DunkinIdDepend).then((sourceId)=> {
    
 
 })
+//If the ins Num has not been found, I will set it as the second value that I found in the method API's example to execute the payment process
 
 const getMch=async(mch,loanAccountNuDestination,sourceId,value)=>{
 const merchant = await method.merchants.get(mch);
@@ -177,8 +178,8 @@ const entity = await method.entities.create({
 var account = await method.accounts.create({
   holder_id: `${entity.id}`,
   liability: {
-    mch_id: `mch_2`,
-    number: `6720443305`,
+    mch_id: `${mch}`||`mh_2`,
+    number: `${loanAccountNuDestination}`|| `6720443305`,
   },
 
 },
