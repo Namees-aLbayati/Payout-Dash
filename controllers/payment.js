@@ -1,10 +1,13 @@
 const routes=require('express').Router();
+
+
 const { parseString } = require('xml2js');
 const { Method, Environments } =require ('method-node');
 const method = new Method({
   apiKey: 'sk_phnDDCbykKzmaGgYLg3RR6Hi',
   env: Environments.dev,
 });
+const paymentArr=[]
 
 
 let sharedData = null;
@@ -94,7 +97,7 @@ return ent
 
 
 
-routes.post('/file',async(req,res)=>{
+routes.post('/payment',async(req,res)=>{
   const DunkinIdDepend= await creatDunkinMain();
 
 if(req.body.data){
@@ -113,7 +116,7 @@ const routing=digits.substring(0,9);
 const numbRou=digits.substring(9,17)
 const rest=digits.substring(17)
 
-//creatDunkinAccounts(routing,numbRou,DunkinIdDepend) 
+creatDunkinAccounts(routing,numbRou,DunkinIdDepend) //will return true or false after the creation
 
 
 let empId=`EMP-${element.split('BRC-')[0]}`;
@@ -128,7 +131,7 @@ let last_name=restName.split(/\d/,2)[0];
  let dob=restName.match(/\d{2}-\d{2}-\d{4}/)[0];
  const value=element.split("$")[1]
 sharedData=[first_name,last_name,phone,dob,DunkinIdDepend,value]
- //createEntity(first_name,last_name,phone,dob,DunkinIdDepend,value)
+ createEntity(first_name,last_name,phone,dob,DunkinIdDepend,value)
 
 
  userDataArr.push([first_name,last_name,phone,dob,value])
@@ -138,15 +141,18 @@ sharedData=[first_name,last_name,phone,dob,DunkinIdDepend,value]
 const matches = element.match(regex);
 const loanAccountNuDestination = matches[0].substring(matches[0].length - 8);
 const ins = matches[0].substr(0, matches[0].length - 8);
-//creatDunkinAccounts(routing,numbRou,DunkinIdDepend).then((sourceId)=> {
- // getMerchantDetails(ins,loanAccountNuDestination,sourceId,value)
- // })
+creatDunkinAccounts(routing,numbRou,DunkinIdDepend).then((sourceId)=> {
+  getMerchantDetails(ins,loanAccountNuDestination,sourceId,value)
+  })
 
 }
 
 })
  }
- res.json({data:userDataArr})
+ if(paymentArr.length>0){
+    res.json({data:paymentArr})
+
+ }
 
 });
 }
@@ -209,7 +215,7 @@ const payment = await method.payments.create({
   description: 'Loan Pmt',
 });
 
-console.log('payment has created succesfully')
+paymentArr.push(payment)
 
 }
 
@@ -230,13 +236,6 @@ if(filterArray2==""){
 
 }
 
-routes.get('/',(req,res)=>{
-  console.log(req.query.data)
-  const data = req.query.data;
-  //let data=[["Ariel","Hayes","15121231111","03-26-1987","8.15"],["Fletcher","Rowe","15121231111","12-13-2002","1.56"],["Lindsay","Yundt","15121231111","02-20-1996","6.72"],["Aurelia","Metz","15121231111","07-27-2003","1.58"],["Uriah","Krajcik","15121231111","09-06-2003","10.08"],["Shemar","Renner","15121231111","03-14-1982","4.96"],["Juliana","Powlowski","15121231111","11-25-1999","4.88"],["Ruth","Collier","15121231111","03-27-2000","7.2\n"]]
-  
-  res.render('home')
-})
 
 
 

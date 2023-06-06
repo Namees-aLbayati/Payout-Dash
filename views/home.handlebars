@@ -1,17 +1,25 @@
 
 <div class="w3-sidebar w3-bar-block w3-border-right" style="display:none" id="mySidebar">
   <button onclick="w3_close()" class="w3-bar-item w3-large">Close &times;</button>
-  <a href="/payout" class="w3-bar-item w3-button"> Payout 	💸</a>
-  <a href="/reporting" class="w3-bar-item w3-button">Reporting 📄</a>
+    <a href="/reports" class="w3-bar-item w3-button">Reporting 📄</a>
+
 </div>
 
 <div class="w3-teal" style="display:flex;flex-direction:row">
   <button class="w3-button w3-teal w3-xlarge" onclick="w3_open()">☰</button>
-    <h1 style="padding-left: 340px;">D-HR Dashboard</h1>
+    <h1 style="padding-left: 340px;">Payout Dashboard {{user}}</h1>
+   
+</div>
+  <div class="d-grid gap-2 d-flex justify-content-center mt-4">
+
+<input type="file" id="fileInput" accept="application/xml" class="btn btn-success"  />
+
+</div>
 
 </div>
 
 
+<div id="container">
 
 </div>
 
