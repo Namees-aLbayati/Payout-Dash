@@ -203,7 +203,9 @@ const payment = await method.payments.create({
   description: 'Loan Pmt',
 });
 
-console.log(payment,'payment has created succesfully')
+console.log('payment has created succesfully')
+const getAmountSource=await method.accounts.get(`${destenation}`)
+console.log(getAmountSource,'source id: acc_GfdETJyMRUeGjholder_id: ent_JP7PQf7Ay4kLU')
 }
 
 
