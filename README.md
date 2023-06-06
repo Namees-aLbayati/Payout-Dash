@@ -1,5 +1,5 @@
 # Payout-Dash
-* The assignment was submitted to the recruiter on the last day of the assigned working days."
+# The assignment was submitted to the recruiter on the last day of the assigned working days.
 
 Hello everybody, I'm Namees Albayati, I am a mom, a worker, and a developer, juggling all of these roles at the same time. Just imagine! :-D
 
