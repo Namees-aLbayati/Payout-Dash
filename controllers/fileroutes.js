@@ -41,25 +41,7 @@ const creatDunkinMain=async()=>{
 
 
 
-const addingAccountsToDunkin=async(id)=>{
-console.log(id,dunkinId[0],' data dunkin accounts');
-dunkinId.forEach((ele)=>{
-  const source =  method.accounts.create({
-    holder_id: `${id}`,
-    ach: {
-      routing: `${ele[0]}`,
-      number: `${ele[1]}`,
-      type: 'checking',
-    },
-  }).then((sourceInfor)=>{
-    console.log('source account has created succesfully',sourceInfor)
 
-  })
-
-
-})
-
-}
 
 
 const creatDunkinAccounts=async(ABARouting,accountNumber,dunkinId)=>{
@@ -142,18 +124,18 @@ let last_name=restName.split(/\d/,2)[0];
  let dob=restName.match(/\d{2}-\d{2}-\d{4}/)[0];
  createEntity(first_name,last_name,phone,dob,DunkinIdDepend)
  //will return true or false 
+ const value=element.split("$")[1]
+
+ userDataArr.push([first_name,last_name,phone,dob,value])
+
 
  const regex = /ins_\d+/gim;
 const matches = element.match(regex);
 const loanAccountNuDestination = matches[0].substring(matches[0].length - 8);
 const ins = matches[0].substr(0, matches[0].length - 8);
-const value=element.split("$")[1]
 creatDunkinAccounts(routing,numbRou,DunkinIdDepend).then((sourceId)=> {
   getMerchantDetails(ins,loanAccountNuDestination,sourceId,value)
-
-  
   })
-
 
 }
 
@@ -169,40 +151,59 @@ creatDunkinAccounts(routing,numbRou,DunkinIdDepend).then((sourceId)=> {
 const getMch=async(mch,loanAccountNuDestination,sourceId,value)=>{
 const merchant = await method.merchants.get(mch);
 const entity = await method.entities.create({
-  type: 'individual',
-  individual: {
-    first_name: `${merchant.parent_name}`,
-  },
+    type: 'individual',
+    individual: {
+      first_name: `${merchant.parent_name}`,
+      phone:'15121231111',
+      last_name:'test'
+
+    },
 });
 
-const account = await method.accounts.create({
+
+var account = await method.accounts.create({
   holder_id: `${entity.id}`,
   liability: {
-    mch_id: `${mch}`,
-    number: `${loanAccountNuDestination}`,
-    type:""
-  
-  }})
+    mch_id: `mch_2`,
+    number: `6720443305`,
+  },
+
+},
+
+
+)
+
+console.log('BEFORE SYNCCC',account)
+
+const accountcheck = await method.accounts.get(`${account.id}`);
+
+
+
+
+//const refresh = await method.entities.refreshCapabilities(`${entity.id}`);
+
+
 //reciver acc
-const accountSync = await method.accounts.get(`${account.id}`);
-console.log('sync',account)
+//account.capabilities[1]="data:sync";
+ //account.available_capabilities=["payments:receive"]
+//console.log('sync',refresh)
 
 
-let destenation=account
+let destenation=account.id
 
+//console.log('desta',destenation)
 let source=sourceId;
 let valuetoTransfer=value;
 const convertedAmount = Math.round(valuetoTransfer * 100); 
 
 const payment = await method.payments.create({
-  amount: 5000,
-  source: 'acc_FbA8UCqqT8LKp',
-  destination: 'acc_LNJ3BBaYp3TUe',
+  amount: convertedAmount,
+  source: `${source}`,
+  destination: `${destenation}`,
   description: 'Loan Pmt',
 });
-console.log('pay',payment)
 
-
+console.log(payment,'payment has created succesfully')
 }
 
 

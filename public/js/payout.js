@@ -28,7 +28,8 @@ const sendToBackendFun=(data)=>{
     .then(response => response.json())
     .then(responseData => {
       // Handle the response data
-    console.log('recived from backend')
+      
+    console.log('recived from backend',responseData)
     })
   
 
