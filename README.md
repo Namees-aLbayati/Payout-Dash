@@ -3,7 +3,7 @@
 
 Hello everybody, I'm Namees Albayati, I am a mom, a worker, and a developer, juggling all of these roles at the same time. Just imagine! :-D
 
-I worked on this assessment to showcase my abilities and demonstrate the value I can bring to your team. Although I couldn't complete it within the given time frame, I dedicated my down time to work on it. My current workload is quite demanding, and I expect it to continue for the next three weeks.
+I worked on this assessment to showcase my abilities and demonstrate the value I can bring to your team. Although I couldn't fully complete it within the given time frame, I dedicated my down time to work on it. My current workload is quite demanding, and I expect it to continue for the next three weeks.
 
 I am confident that I can complete the assessment if provided with some additional time. I have plans to add more features to enhance its functionality, such as the ability to create separate payments by clicking on the buttons displayed in the table.
 
